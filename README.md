@@ -33,3 +33,10 @@ Date detection is restricted to `YYYY-MM-DD` and `YYYY/MM/DD`. `MM/DD/YYYY` is i
 A value is treated as null when it is empty after stripping whitespace or equals the literal token `NULL` (case-insensitive). `NA` is not treated as null, because assuming so would silently swallow data that looks like data. Rows shorter than the header are padded with empty strings (counted as nulls); rows longer than the header have their trailing extra cells dropped.
 
 Standard library only. No third-party dependencies. Runs under `python -m unittest discover -s tests` with `PYTHONPATH=src`.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
